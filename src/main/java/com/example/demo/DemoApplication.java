@@ -1,6 +1,10 @@
 package com.example.demo;
 
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.Route;
 import java.util.Collection;
+import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -86,3 +90,30 @@ class BoredActivityController {
     return this.client.suggestAnActivity();
   }
 }
+
+@Route("listCustomers")
+class WebsiteView extends VerticalLayout {
+
+  final Grid<Customer> grid;
+
+  private final CustomerRepository customerRepository;
+
+  public WebsiteView(CustomerRepository customerRepository) {
+    this.customerRepository = customerRepository;
+
+    grid = new Grid<>();
+    grid.addColumn(Customer::id).setHeader("ID");
+    grid.addColumn(Customer::name).setHeader("Name");
+
+    add(grid);
+
+    listCustomers();
+  }
+
+  private void listCustomers() {
+    var customers = StreamSupport.stream(customerRepository.findAll()
+        .spliterator(), false).toList();
+    grid.setItems(customers);
+  }
+}
+
