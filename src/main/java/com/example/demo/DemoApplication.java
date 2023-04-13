@@ -1,11 +1,9 @@
 package com.example.demo;
 
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Route;
+import com.example.demo.entity.Customer;
+import com.example.demo.repository.CustomerRepository;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,11 +12,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,15 +45,6 @@ public class DemoApplication {
 
 }
 
-record Customer(@Id Integer id, String name) {
-
-}
-
-interface CustomerRepository extends CrudRepository<Customer, Integer> {
-
-  Collection<Customer> findByName(String name);
-}
-
 @Controller
 @RequiredArgsConstructor
 class CustomerController {
@@ -63,7 +52,7 @@ class CustomerController {
   private final CustomerRepository customerRepository;
 
   @ResponseBody
-  @GetMapping("/customers")
+  @GetMapping("/test/customers")
   Iterable<Customer> customers() {
     return customerRepository.findAll();
   }
@@ -74,14 +63,11 @@ class CustomerController {
     return customerRepository.findByName(name);
   }
 
-  @GetMapping("/testSome/{str}")
-  void callTestSome(@PathVariable String str) {
-    testSome(str);
-  }
-
   @SneakyThrows
-  void testSome(String str) {
+  @GetMapping("/test/{str}")
+  ResponseEntity<Void> test(@PathVariable String str) {
     TimeUnit.SECONDS.sleep(2);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }
 
@@ -105,32 +91,6 @@ class BoredActivityController {
   @SchemaMapping(typeName = "Customer")
   Activity suggestedActivity(Customer customer) {
     return this.client.suggestAnActivity();
-  }
-}
-
-@Route("listCustomers")
-class WebsiteView extends VerticalLayout {
-
-  final Grid<Customer> grid;
-
-  private final CustomerRepository customerRepository;
-
-  public WebsiteView(CustomerRepository customerRepository) {
-    this.customerRepository = customerRepository;
-
-    grid = new Grid<>();
-    grid.addColumn(Customer::id).setHeader("ID");
-    grid.addColumn(Customer::name).setHeader("Name");
-
-    add(grid);
-
-    listCustomers();
-  }
-
-  private void listCustomers() {
-    var customers = StreamSupport.stream(customerRepository.findAll()
-        .spliterator(), false).toList();
-    grid.setItems(customers);
   }
 }
 
