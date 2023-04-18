@@ -11,6 +11,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.availability.AvailabilityChangeEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -43,6 +45,10 @@ public class DemoApplication {
         .createClient(BoredClient.class);
   }
 
+  @Bean
+  ApplicationListener<AvailabilityChangeEvent<?>> availabilityChangeEventApplicationListener() {
+    return event -> System.out.println(event.getResolvableType() + " :: " + event.getState());
+  }
 }
 
 @Controller
