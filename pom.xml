@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.0.5</version>
+    <version>3.0.7</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.example</groupId>
@@ -16,9 +16,15 @@
   <description>Demo project for Spring Boot</description>
   <properties>
     <java.version>17</java.version>
-    <vaadin.version>24.0.4</vaadin.version>
+    <vaadin.version>24.0.5</vaadin.version>
+    <snakeyaml.version>2.0</snakeyaml.version>
   </properties>
   <dependencies>
+    <!--  if we can use vaadin with boot 3.1.x+, impl this one  -->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.boot</groupId>-->
+    <!--      <artifactId>spring-boot-docker-compose</artifactId>-->
+    <!--    </dependency>-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
@@ -94,7 +100,7 @@
     <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-resolver-dns-native-macos</artifactId>
-      <version>4.1.91.Final</version>
+      <version>4.1.92.Final</version>
       <classifier>osx-aarch_64</classifier>
     </dependency>
   </dependencies>
