@@ -13,10 +13,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.availability.AvailabilityChangeEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
@@ -55,8 +55,8 @@ public class DemoApplication {
     return new RestTemplate();
   }
 
-  @Profile("async")
   @Bean
+  @ConditionalOnProperty(name = "test.async", havingValue = "true")
   CommandLineRunner runner(GitHubLookupService gitHubLookupService) {
     return args -> {
       long start = System.currentTimeMillis();
