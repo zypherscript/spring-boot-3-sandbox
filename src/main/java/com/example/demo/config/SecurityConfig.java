@@ -19,19 +19,16 @@ public class SecurityConfig extends VaadinWebSecurity {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
-        .csrf().ignoringRequestMatchers("/graphql")
-        .and()
-        .authorizeHttpRequests()
-        .requestMatchers("/graphql", "/test/**")
-        .permitAll();
+        .csrf(csrfConfigurer -> csrfConfigurer.ignoringRequestMatchers("/graphql"))
+        .authorizeHttpRequests(authorize ->
+            authorize.requestMatchers("/graphql", "/test/**"));
     super.configure(http);
     setLoginView(http, LoginView.class);
   }
 
   @Bean
   public UserDetailsService users() {
-    var admin = User.builder()
-        .username("admin")
+    var admin = User.withUsername("admin")
         .password("{noop}p@ssw0rd")
         .roles("USER", "ADMIN")
         .build();
