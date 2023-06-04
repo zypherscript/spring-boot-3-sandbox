@@ -19,7 +19,9 @@ public class WebSecurity {
     http
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(authorize ->
-            authorize.requestMatchers("/graphiql", "/graphql", "/test/**").permitAll())
+            authorize.requestMatchers("/actuator/**").permitAll())
+        .authorizeHttpRequests(authorize ->
+            authorize.anyRequest().authenticated())
         .httpBasic(Customizer.withDefaults());
     return http.build();
   }

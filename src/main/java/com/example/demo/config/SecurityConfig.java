@@ -21,7 +21,7 @@ public class SecurityConfig extends VaadinWebSecurity {
     http
         .csrf(csrfConfigurer -> csrfConfigurer.ignoringRequestMatchers("/graphql"))
         .authorizeHttpRequests(authorize ->
-            authorize.requestMatchers("/graphql", "/test/**"));
+            authorize.requestMatchers("/actuator/**").permitAll());
     super.configure(http);
     setLoginView(http, LoginView.class);
   }
