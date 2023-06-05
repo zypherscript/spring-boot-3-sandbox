@@ -35,7 +35,7 @@ public class WebSecurity {
 
   @Bean
   DelegatingPasswordEncoder passwordEncoder() {
-    var bcrypt = new BCryptPasswordEncoder(10); //check this later bruh
+    var bcrypt = new BCryptPasswordEncoder(13);
     Map<String, PasswordEncoder> passwordEncoders = Map.of("bcrypt", bcrypt);
     return new DelegatingPasswordEncoder("bcrypt", passwordEncoders);
   }
@@ -44,7 +44,7 @@ public class WebSecurity {
   UserDetailsService users() {
     return new InMemoryUserDetailsManager(
         User.withUsername("user")
-            .password("{bcrypt}$2a$10$73yinqB.52oyN682b.Aew.39orzbjhBNZfxXIoW0q4N3bYXXQDqJS")
+            .password("{bcrypt}$2a$13$3fFG6h/SKI19kzsnO8v.hu5vEwIwmqUyV5YzEJS7HG3thx0OkHMjm")
             .roles("USER")
             .build()
     );
