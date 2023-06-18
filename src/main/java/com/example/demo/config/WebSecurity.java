@@ -19,10 +19,13 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = false)
 @Profile("!vaadin-sec-view")
 public class WebSecurity {
 
@@ -31,7 +34,9 @@ public class WebSecurity {
     http
         .csrf(csrfConfigurer -> csrfConfigurer
             .csrfTokenRepository(
-                CookieCsrfTokenRepository.withHttpOnlyFalse()) //lot of thing to learn like request(post) with xsrf-token...
+                CookieCsrfTokenRepository.withHttpOnlyFalse())
+            .csrfTokenRequestHandler(
+                new CsrfTokenRequestAttributeHandler()) //it-test: request(post) with xsrf-token...
             .ignoringRequestMatchers("/graphql")
         )
         .authorizeHttpRequests(authorize -> authorize
@@ -46,7 +51,13 @@ public class WebSecurity {
 //                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) //anyway no need for this demo(with vaadin, we can)
                     .addLogoutHandler(
                         new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(CACHE, COOKIES)))
-        );
+        )
+        .addFilterAfter(
+            (request, response, filterChain) -> { //it-test: request(post) with xsrf-token...
+              CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+              token.getToken();
+              filterChain.doFilter(request, response);
+            }, CsrfFilter.class);
     return http.build();
   }
 

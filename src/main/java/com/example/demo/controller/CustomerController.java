@@ -14,17 +14,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/request")
 class CustomerController {
 
   private final CustomerRepository customerRepository;
 
   @ResponseBody
-  @GetMapping("/test/customers")
+  @PostMapping("/test/customers")
   Iterable<Customer> customers() {
     return customerRepository.findAll();
   }
