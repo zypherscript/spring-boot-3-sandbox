@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.example</groupId>
@@ -16,7 +16,7 @@
   <description>Demo project for Spring Boot</description>
   <properties>
     <java.version>20</java.version>
-    <vaadin.version>24.0.5</vaadin.version>
+    <vaadin.version>24.1.1</vaadin.version>
     <snakeyaml.version>2.0</snakeyaml.version>
   </properties>
   <dependencies>
@@ -107,7 +107,7 @@
     <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-resolver-dns-native-macos</artifactId>
-      <version>4.1.92.Final</version>
+      <version>4.1.94.Final</version>
       <classifier>osx-aarch_64</classifier>
     </dependency>
   </dependencies>
