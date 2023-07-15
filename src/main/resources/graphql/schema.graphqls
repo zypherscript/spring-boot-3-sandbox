@@ -1,5 +1,6 @@
 type Query {
   customersByName (name: String) : [Customer]
+  findAllCustomers: [Customer]
 }
 
 type Activity {
@@ -11,4 +12,8 @@ type Customer {
   id: ID
   name: String
   suggestedActivity: Activity
+}
+
+type Mutation {
+  createCustomer(name: String): Customer
 }

@@ -3,11 +3,14 @@ package com.example.demo.controller;
 import com.example.demo.entity.Customer;
 import com.example.demo.repository.CustomerRepository;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.StreamSupport;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,5 +70,17 @@ class CustomerController {
   ResponseEntity<Void> test(@PathVariable String str) {
     TimeUnit.SECONDS.sleep(2);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  @QueryMapping
+  public List<Customer> findAllCustomers() {
+    return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+        .toList();
+  }
+
+  @MutationMapping
+  public Customer createCustomer(@Argument String name) {
+    var customer = new Customer(null, name);
+    return customerRepository.save(customer);
   }
 }
